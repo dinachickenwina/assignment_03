@@ -34,26 +34,26 @@ st.title("Process File of Packages")
 uploaded_file = st.file_uploader("Choose a package file:", key="package_file")
 
 if uploaded_file:
-	# 1. Bytes to text.
-	lines = uploaded_file.getvalue().decode("utf-8").splitlines()
+    # 1. Bytes to text.
+    lines = uploaded_file.getvalue().decode("utf-8").splitlines()
 
-	# 2. Parse and show each nonblank line.
-	packages = []
-	for line in lines:
-		line = line.strip()
-		if not line:
-			continue
+    # 2. Parse and show each nonblank line.
+    packages = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
 
-		package = parse_packaging(line)
-		packages.append(package)
-		total = calc_total_units(package)
-		unit = get_unit(package)
-		st.info(f"{line} ➡️ Total 📦 Size: {total} {unit}")
+        package = parse_packaging(line)
+        packages.append(package)
+        total = calc_total_units(package)
+        unit = get_unit(package)
+        st.info(f"{line} ➡️ Total 📦 Size: {total} {unit}")
 
-	# 3. Write the parsed packages to a JSON file beside the input data.
-	output_path = f"data/{uploaded_file.name.replace('.txt', '.json')}"
-	with open(output_path, "w", encoding="utf-8") as output_file:
-		json.dump(packages, output_file)
+    # 3. Write the parsed packages to a JSON file beside the input data.
+    output_path = f"data/{uploaded_file.name.replace('.txt', '.json')}"
+    with open(output_path, "w", encoding="utf-8") as output_file:
+        json.dump(packages, output_file)
 
-	# 4. Confirm the result.
-	st.success(f"{len(packages)} packages written to {output_path}")
+    # 4. Confirm the result.
+    st.success(f"{len(packages)} packages written to {output_path}")
