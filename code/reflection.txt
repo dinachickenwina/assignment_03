@@ -1,14 +1,8 @@
-I learned that Streamlit reruns the whole script after every interaction. A widget's
-return value can be empty on the first run, so parsing needs a guard. Uploaded files
-arrive as bytes; decoding them before splitting into lines, then skipping blank lines,
-prevents empty lines from being sent to the parser.
+Write your reflection here.
 
-The part I had to think through most was session state. Ordinary variables reset on a
-rerun, while values in `st.session_state` can retain the file and package counts. The
-uploader also keeps its selected file, so processing must be button-triggered to avoid
-counting it again on unrelated reruns. The tests for uploading without clicking and
-for rerunning without clicking helped make those behaviors clear.
+See reflection.md for what makes a good reflection — be specific, use the
+terminology from this assignment (rerun, widget, return value, guard, bytes vs.
+text, decode, session state, initialise once, button-triggered, metric), and make
+it actionable.
 
-I still need practice deciding what belongs in session state and handling invalid
-package descriptions. A useful next exercise is to add `try`/`except ValueError` around
-parsing, then test empty, whitespace-only, and malformed input as well as valid files.
+The most important concept I learned in this assignment was understanding that Streamlit reruns the entire script from the top every time the user clicks or types something. This changed how I think about keeping track of information in web apps. At first, I struggled with Part 3 because I tried to keep a counter variable at the top of the script, but it would reset to zero every time the page reran. Once I moved the counter into st.session_state and used if "files_processed" not in st.session_state to set it up only once, the problem went away. The second big trap was that the file uploader keeps its value after every rerun, so if I processed a file whenever one was uploaded, it would count the same file over and over. I fixed this by putting the processing behind a button that only returns True on the exact moment it gets clicked. Working through Parts 1 and 2 taught me how to use st.text_input, st.file_uploader, and output widgets like st.info and st.success. I also learned how to convert uploaded files from bytes to text using .getvalue().decode("utf-8") and then splitting on line breaks. What still feels tricky to me is getting the timing right for when to read from st.session_state and when to update it. I need more practice with complicated workflows to feel confident I am updating state at the right time. My next step is to look at the class examples like 2-counter-session.py to better understand when to initialize, update, and display values in relation to what the user does.
