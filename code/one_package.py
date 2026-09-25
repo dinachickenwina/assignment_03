@@ -41,17 +41,19 @@ package_data = st.text_input(
 # calls to you; the third gives you neither.
 
 if package_data:
-    # 1. Parse.
-    package = parse_packaging(package_data)
+    try:
+        package = parse_packaging(package_data)
+    except ValueError:
+        st.error("Please enter a valid package description, such as '12 eggs in 1 carton'.")
+    else:
+        # 2. Total.
+        total = calc_total_units(package)
+        unit = get_unit(package)
 
-    # 2. Total.
-    total = calc_total_units(package)
-    unit = get_unit(package)
+        # 3. Show each level.
+        for level in package:
+            for name, quantity in level.items():
+                st.info(f"{name} ➡️ {quantity}")
 
-    # 3. Show each level.
-    for level in package:
-        for name, quantity in level.items():
-            st.info(f"{name} ➡️ {quantity}")
-
-    # 4. Show the total.
-    st.success(f"Total 📦 Size: {total} {unit}")
+        # 4. Show the total.
+        st.success(f"Total 📦 Size: {total} {unit}")
