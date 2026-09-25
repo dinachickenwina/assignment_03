@@ -1,6 +1,14 @@
-Write your reflection here.
+I learned that Streamlit reruns the whole script after every interaction. A widget's
+return value can be empty on the first run, so parsing needs a guard. Uploaded files
+arrive as bytes; decoding them before splitting into lines, then skipping blank lines,
+prevents empty lines from being sent to the parser.
 
-See reflection.md for what makes a good reflection — be specific, use the
-terminology from this assignment (rerun, widget, return value, guard, bytes vs.
-text, decode, session state, initialise once, button-triggered, metric), and make
-it actionable.
+The part I had to think through most was session state. Ordinary variables reset on a
+rerun, while values in `st.session_state` can retain the file and package counts. The
+uploader also keeps its selected file, so processing must be button-triggered to avoid
+counting it again on unrelated reruns. The tests for uploading without clicking and
+for rerunning without clicking helped make those behaviors clear.
+
+I still need practice deciding what belongs in session state and handling invalid
+package descriptions. A useful next exercise is to add `try`/`except ValueError` around
+parsing, then test empty, whitespace-only, and malformed input as well as valid files.
